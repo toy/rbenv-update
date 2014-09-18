@@ -12,14 +12,40 @@ is_git_repo() {
   $(git rev-parse --git-dir &>/dev/null)
 }
 
+has_origin() {
+  [[ $(git remote) =~ ^origin$ ]]
+}
+
 rbenv_update() {
   echo -e "\033[1;32mupdating $1\033[0m"
-  if is_git_repo; then
-    git checkout master 2>&1 | indent_output
-    git fetch origin 2>&1 | indent_output
-    git pull origin master 2>&1 | indent_output
-  else
+  if ! is_git_repo; then
     echo -e "Not a git repo; skipping..." | indent_output
+  elif ! has_origin; then
+    echo -e "Has no remote origin; skipping..." | indent_output
+  else
+    if branch=$(git symbolic-ref --short -q HEAD); then
+      echo -e "On branch $branch, pulling..." | indent_output
+      git fetch origin 2>&1 | indent_output
+      git pull --ff-only origin 2>&1 | indent_output
+    elif tag=$(git describe --tags --exact-match HEAD 2>/dev/null); then
+      latest_tag=$(git describe --tags --abbrev=0 master@{u} 2>/dev/null)
+      if [ "$tag" = "$latest_tag" ]; then
+        echo -e "At tag $tag, updating..." | indent_output
+        git fetch origin 2>&1 | indent_output
+        latest_tag=$(git describe --tags --abbrev=0 master@{u} 2>/dev/null)
+        if [ "$tag" = "$latest_tag" ]; then
+          echo -e "Already at latest tag." | indent_output
+        else
+          echo "Switching to $latest_tag." | indent_output
+          git checkout "$latest_tag" -q
+        fi
+      else
+        echo -e "At tag $tag, which is not latest for master upstream"\
+          "($latest_tag), skipping..." | indent_output
+      fi
+    else
+      echo "Not on branch or at tag, skipping..." | indent_output
+    fi
   fi
   echo
 }
