@@ -16,7 +16,7 @@ is_git_repo() {
 }
 
 has_origin() {
-  [[ $(git remote) =~ ^origin$ ]]
+  git config remote.origin.url > /dev/null
 }
 
 rbenv_update() {
