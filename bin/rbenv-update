@@ -45,10 +45,12 @@ rbenv_update() {
         fi
       else
         echo -e "${WARN}At tag $tag, which is not latest for master upstream"\
-          "($latest_tag), skipping...${NORMAL}" | indent_output
+          "($latest_tag), only fetching...${NORMAL}" | indent_output
+        git fetch origin 2>&1 | indent_output
       fi
     else
-      echo -e "${WARN}Not on branch or at tag, skipping...${NORMAL}" | indent_output
+      echo -e "${WARN}Not on branch or at tag, only fetching...${NORMAL}" | indent_output
+      git fetch origin 2>&1 | indent_output
     fi
   fi
   echo
