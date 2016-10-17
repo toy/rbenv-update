@@ -3,6 +3,7 @@ set -e
 [ -n "$RBENV_DEBUG" ] && set -x
 
 HIGLIGHT=$(tput setaf 2)$(tput bold)
+WARN=$(tput setaf 1)$(tput bold)
 NORMAL=$(tput sgr0)
 
 indent_output() {
@@ -22,9 +23,9 @@ has_origin() {
 rbenv_update() {
   echo -e "${HIGLIGHT}updating $1${NORMAL}"
   if ! is_git_repo; then
-    echo -e "Not a git repo; skipping..." | indent_output
+    echo -e "${WARN}Not a git repo; skipping...${NORMAL}" | indent_output
   elif ! has_origin; then
-    echo -e "Has no remote origin; skipping..." | indent_output
+    echo -e "${WARN}Has no remote origin; skipping...${NORMAL}" | indent_output
   else
     if branch=$(git symbolic-ref --short -q HEAD); then
       echo -e "On branch $branch, pulling..." | indent_output
@@ -39,15 +40,15 @@ rbenv_update() {
         if [ "$tag" = "$latest_tag" ]; then
           echo -e "Already at latest tag." | indent_output
         else
-          echo "Switching to $latest_tag." | indent_output
+          echo -e "Switching to $latest_tag." | indent_output
           git checkout "$latest_tag" -q
         fi
       else
-        echo -e "At tag $tag, which is not latest for master upstream"\
-          "($latest_tag), skipping..." | indent_output
+        echo -e "${WARN}At tag $tag, which is not latest for master upstream"\
+          "($latest_tag), skipping...${NORMAL}" | indent_output
       fi
     else
-      echo "Not on branch or at tag, skipping..." | indent_output
+      echo -e "${WARN}Not on branch or at tag, skipping...${NORMAL}" | indent_output
     fi
   fi
   echo
