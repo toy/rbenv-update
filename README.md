@@ -5,4 +5,4 @@ This [rbenv](http://rbenv.org/) plugin adds the `rbenv update` command that upda
 Simply clone the repository into the plugins directory:
 
     mkdir -p "$(rbenv root)"/plugins
-    git clone https://github.com/rkh/rbenv-update.git "$(rbenv root)"/plugins/rbenv-update
+    git clone https://github.com/toy/rbenv-update.git "$(rbenv root)"/plugins/update
