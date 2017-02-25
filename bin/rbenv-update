@@ -2,6 +2,10 @@
 set -e
 [ -n "$RBENV_DEBUG" ] && set -x
 
+tput() {
+  command tput "$@" 2>/dev/null || true
+}
+
 HIGLIGHT=$(tput setaf 2)$(tput bold)
 WARN=$(tput setaf 1)$(tput bold)
 NORMAL=$(tput sgr0)
