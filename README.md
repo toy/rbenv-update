@@ -6,3 +6,17 @@ Simply clone the repository into the plugins directory:
 
     mkdir -p "$(rbenv root)"/plugins
     git clone https://github.com/toy/rbenv-update.git "$(rbenv root)"/plugins/update
+
+## Usage
+
+Update rbenv and all plugins:
+
+```sh
+rbenv update
+```
+
+Update selectively:
+
+```sh
+rbenv update rbenv ruby-build
+```

@@ -60,11 +60,21 @@ rbenv_update() {
   echo
 }
 
+if [ $# -gt 0 ]; then
+  to_update="$*"
+fi
+
 cd "$(rbenv root)"
-rbenv_update rbenv
+
+if [[ -z "$to_update" ]] || [[ " $to_update " =~ " rbenv " ]]; then
+  rbenv_update rbenv
+fi
 
 for plugin in plugins/*; do
-  pushd $plugin >/dev/null
-  rbenv_update `basename $plugin`
-  popd >/dev/null
+  name=`basename $plugin`
+  if [[ -z "$to_update" ]] || [[ " $to_update " =~ " $name " ]]; then
+    pushd $plugin >/dev/null
+    rbenv_update "$name"
+    popd >/dev/null
+  fi
 done
