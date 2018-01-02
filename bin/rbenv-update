@@ -17,7 +17,7 @@ indent_output() {
 }
 
 is_git_repo() {
-  $(git rev-parse --git-dir &>/dev/null)
+  git rev-parse --git-dir &>/dev/null
 }
 
 has_origin() {
@@ -66,14 +66,14 @@ fi
 
 cd "$(rbenv root)"
 
-if [[ -z "$to_update" ]] || [[ " $to_update " =~ " rbenv " ]]; then
+if [[ -z "$to_update" ]] || [[ " $to_update " == *" rbenv "* ]]; then
   rbenv_update rbenv
 fi
 
 for plugin in plugins/*; do
-  name=`basename $plugin`
-  if [[ -z "$to_update" ]] || [[ " $to_update " =~ " $name " ]]; then
-    pushd $plugin >/dev/null
+  name=$(basename "$plugin")
+  if [[ -z "$to_update" ]] || [[ " $to_update " == *" $name "* ]]; then
+    pushd "$plugin" >/dev/null
     rbenv_update "$name"
     popd >/dev/null
   fi

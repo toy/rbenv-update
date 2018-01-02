@@ -4,6 +4,6 @@ set -e
 
 echo -n "$(which rbenv-update)$(printf " %q" "$@") && "
 echo -n 'echo -e "\033[1;32mreloading rbenv\033[0m" && '
-echo -n 'eval "$(rbenv init -)"'
+echo -n 'eval "$''(rbenv init -)"'
 
 echo
