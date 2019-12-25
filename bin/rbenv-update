@@ -34,7 +34,7 @@ rbenv_update() {
     if branch=$(git symbolic-ref --short -q HEAD); then
       echo -e "On branch $branch, pulling..." | indent_output
       git fetch origin 2>&1 | indent_output
-      git pull --ff-only origin 2>&1 | indent_output
+      git merge --ff-only FETCH_HEAD 2>&1 | indent_output
     elif tag=$(git describe --tags --exact-match HEAD 2>/dev/null); then
       latest_tag=$(git describe --tags --abbrev=0 master@{u} 2>/dev/null)
       if [ "$tag" = "$latest_tag" ]; then
